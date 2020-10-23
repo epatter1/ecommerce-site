@@ -15,7 +15,7 @@ export default function CartScreen(props) {
 */
   }
   const qty = props.location.search
-    ? Number(props.location.search.split("=")[1])
+    ? Number(props.location.search.split('=')[1])
     : 1;
   { /* using useSelector to fetch cart data from redux store */ }
   const cart = useSelector((state) => state.cart);
@@ -74,7 +74,7 @@ export default function CartScreen(props) {
                           addToCart(item.product, Number(e.target.value))
                         )
                       }
-                    >
+                    >  {/* creates options from 1...count in stock */ }
                       {[...Array(item.countInStock).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
                           {x + 1}
@@ -100,7 +100,7 @@ export default function CartScreen(props) {
       <div className="col-1">
         <div className="card card-body">
           <ul>
-            <li>
+            <li> {/* subtotal uses reduce method of array to calculate sub total */}
               <h2>
                 Subtotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items): $
                 {cartItems.reduce((a, c) => a + c.price * c.qty, 0)}
