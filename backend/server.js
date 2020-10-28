@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from "dotenv";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
+import orderRouter from "./routers/orderRouter.js";
 
 // Note: must append file extension on imports in server side (express)
 
@@ -21,10 +22,12 @@ mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
 });
 
 // use this route for userRouter
-app.use('/api/users/', userRouter);
+app.use('/api/users', userRouter);
 
 // When frontend enters this address, returns data from MongoDB
-app.use('/api/products/', productRouter);
+app.use('/api/products', productRouter);
+// use imported orderRouter API to respond to api/orders path
+app.use('/api/orders', orderRouter);
 
 // serving root of server
 app.get("/", (req, res) => {
@@ -33,8 +36,8 @@ app.get("/", (req, res) => {
 
 // error redirected here from expressAsyncHander in userRouter.js
 app.use((err, req, res, next) => {
-  res.status(500).send({message: err.message })
-})
+  res.status(500).send({ message: err.message })
+});
 
 //listen on environment port and use 5000 if none available
 const port = process.env.PORT || 5000;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export default function MessageBox(props) {
     return ( 
@@ -9,5 +9,5 @@ export default function MessageBox(props) {
         {/* children is a special props which shows 
         the message box in the place it has been used */}           
         </div>
-    )
+    );
 }

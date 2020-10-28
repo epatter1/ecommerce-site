@@ -1,15 +1,21 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { cartReducer } from "./reducers/cartReducers";
+import { orderCreateReducer } from "./reducers/orderReducers";
 import {
   productDetailsReducer,
   productListReducer,
 } from "./reducers/productReducers";
-import { userRegisterReducer, userSigninReducer } from "./reducers/userReducers";
+import {
+  userRegisterReducer,
+  userSigninReducer,
+} from "./reducers/userReducers";
 
-{ /* Keep user's name in localStorage to persist 
+{
+  /* Keep user's name in localStorage to persist 
      after page refresh  
-    -- initial value for cart object based on localstorage value */}
+    -- initial value for cart object based on localstorage value */
+}
 
 const initialState = {
   userSignIn: {
@@ -21,6 +27,10 @@ const initialState = {
     cartItems: localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [],
+    shippingAddress: localStorage.getItem("shippingAddress")
+      ? JSON.parse(localStorage.getItem("shippingAddress"))
+      : {}, //if shippingAddress exists, convert to JSON. Otherwise use an empty object.
+    paymentMethod: 'PayPal',
   },
 };
 {
@@ -32,7 +42,8 @@ const reducer = combineReducers({
   productDetails: productDetailsReducer,
   cart: cartReducer,
   userSignIn: userSigninReducer,
-  userRegister: userRegisterReducer
+  userRegister: userRegisterReducer,
+  orderCreate: orderCreateReducer,
 });
 {
   /* before showing store in Redux Dev tools, need to update compose function */

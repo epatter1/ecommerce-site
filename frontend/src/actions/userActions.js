@@ -54,8 +54,10 @@ export const signin = (email, password) => async (dispatch) => {
   }
 };
 
+{/* remove these from localStorage when user signs out */}
 export const signout = () => (dispatch) => {
-  localStorage.removeItem("userInfo");
-  localStorage.removeItem("cartItems");
+  localStorage.removeItem('userInfo');
+  localStorage.removeItem('cartItems');
+  localStorage.removeItem('shippingAddress');
   dispatch({ type: USER_SIGNOUT });
 };
