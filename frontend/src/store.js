@@ -1,14 +1,16 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { cartReducer } from "./reducers/cartReducers";
-import { orderCreateReducer } from "./reducers/orderReducers";
+import { orderCreateReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from "./reducers/orderReducers";
 import {
   productDetailsReducer,
   productListReducer,
 } from "./reducers/productReducers";
 import {
+  userDetailsReducer,
   userRegisterReducer,
   userSigninReducer,
+  userUpdateProfileReducer,
 } from "./reducers/userReducers";
 
 {
@@ -44,6 +46,11 @@ const reducer = combineReducers({
   userSignIn: userSigninReducer,
   userRegister: userRegisterReducer,
   orderCreate: orderCreateReducer,
+  orderDetails: orderDetailsReducer,
+  orderPay: orderPayReducer,
+  orderMineList: orderMineListReducer,
+  userDetails: userDetailsReducer,
+  userUpdateProfile: userUpdateProfileReducer
 });
 {
   /* before showing store in Redux Dev tools, need to update compose function */

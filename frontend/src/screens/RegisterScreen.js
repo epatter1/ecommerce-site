@@ -97,6 +97,7 @@ export default function RegisterScreen(props) {
             Register
           </button>
           <div>
+            <br />
             <label />
             <div>
              Already have an account? <Link to={`/signin?redirect=${redirect}`}>Sign-In</Link>

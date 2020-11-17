@@ -74,6 +74,7 @@ export default function SigninScreen(props) {
           <div>
             <label />
             <div>
+              <br />
               New Customer?{" "}
               <Link to={`/register?redirect=${redirect}`}>
                 Create your account

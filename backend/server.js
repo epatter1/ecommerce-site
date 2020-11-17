@@ -28,6 +28,10 @@ app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 // use imported orderRouter API to respond to api/orders path
 app.use('/api/orders', orderRouter);
+// get PayPal client ID
+app.get('/api/config/paypal', (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
+});
 
 // serving root of server
 app.get("/", (req, res) => {
