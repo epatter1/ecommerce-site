@@ -1,9 +1,11 @@
 import express from "express";
 import mongoose from 'mongoose';
 import dotenv from "dotenv";
+import path from "path";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 import orderRouter from "./routers/orderRouter.js";
+import uploadRouter from "./routers/uploadRouter.js";
 
 // Note: must append file extension on imports in server side (express)
 
@@ -20,7 +22,8 @@ mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
   useUnifiedTopology: true,
   useCreateIndex: true,
 });
-
+// upload router for file uploads
+app.use('/api/uploads', uploadRouter);
 // use this route for userRouter
 app.use('/api/users', userRouter);
 
@@ -32,6 +35,9 @@ app.use('/api/orders', orderRouter);
 app.get('/api/config/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
+// serves file in folder at uploads URL path
+const __dirname = path.resolve(); //returns current folder and saves in __dirname
+app.use('/uploads', express.static(path.join(__dirname, '/uploads'))); //concatenate current folder to the uploads folder
 
 // serving root of server
 app.get("/", (req, res) => {

@@ -1,2 +1,4 @@
 backend/.env
 README.md
+/uploads/*.jpg
+/uploads/*.png
