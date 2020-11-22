@@ -13,6 +13,17 @@ import {
   ORDER_PAY_REQUEST,
   ORDER_PAY_RESET,
   ORDER_PAY_SUCCESS,
+  ORDER_LIST_REQUEST,
+  ORDER_LIST_SUCCESS,
+  ORDER_LIST_FAIL,
+  ORDER_DELETE_REQUEST,
+  ORDER_DELETE_SUCCESS,
+  ORDER_DELETE_FAIL,
+  ORDER_DELETE_RESET,
+  ORDER_DELIVER_REQUEST,
+  ORDER_DELIVER_SUCCESS,
+  ORDER_DELIVER_RESET,
+  ORDER_DELIVER_FAIL,
 } from "../constants/orderConstants";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -29,12 +40,14 @@ export const orderCreateReducer = (state = {}, action) => {
       return state;
   }
 };
-{/* removing default orders value (orders = {}) because
+{
+  /* removing default orders value (orders = {}) because
     when ORDER_DETAILS_REQUEST fires, it changed the order from
     an empty object to null which makes the useEffect in OrderScreen.js
-    run again. That's not what I want to do. */}
-export const orderDetailsReducer = (state = {loading:  true} , action ) => {
-  switch(action.type) {
+    run again. That's not what I want to do. */
+}
+export const orderDetailsReducer = (state = { loading: true }, action) => {
+  switch (action.type) {
     case ORDER_DETAILS_REQUEST:
       return { loading: true };
     case ORDER_DETAILS_SUCCESS:
@@ -42,12 +55,12 @@ export const orderDetailsReducer = (state = {loading:  true} , action ) => {
     case ORDER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     default:
-      return state;      
+      return state;
   }
 };
 
 export const orderPayReducer = (state = {}, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case ORDER_PAY_REQUEST:
       return { loading: true };
     case ORDER_PAY_SUCCESS:
@@ -69,6 +82,49 @@ export const orderMineListReducer = (state = { orders: [] }, action) => {
       return { loading: false, orders: action.payload };
     case ORDER_MINE_LIST_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const orderListReducer = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case ORDER_LIST_REQUEST:
+      return { loading: true };
+    case ORDER_LIST_SUCCESS:
+      return { loading: false, orders: action.payload };
+    case ORDER_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const orderDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_DELETE_REQUEST:
+      return { loading: true };
+    case ORDER_DELETE_SUCCESS:
+      return { loading: false, success: true };
+    case ORDER_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    case ORDER_DELETE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const orderDeliverReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_DELIVER_REQUEST:
+      return { loading: true };
+    case ORDER_DELIVER_SUCCESS:
+      return { loading: false, success: true };
+    case ORDER_DELIVER_FAIL:
+      return { loading: false, error: action.payload };
+    case ORDER_DELIVER_RESET:
+      return {};
     default:
       return state;
   }

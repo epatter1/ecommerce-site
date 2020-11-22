@@ -1,7 +1,15 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { cartReducer } from "./reducers/cartReducers";
-import { orderCreateReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from "./reducers/orderReducers";
+import {
+  orderCreateReducer,
+  orderDeleteReducer,
+  orderDeliverReducer,
+  orderDetailsReducer,
+  orderListReducer,
+  orderMineListReducer,
+  orderPayReducer,
+} from "./reducers/orderReducers";
 import {
   productCreateReducer,
   productDeleteReducer,
@@ -35,7 +43,7 @@ const initialState = {
     shippingAddress: localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
       : {}, //if shippingAddress exists, convert to JSON. Otherwise use an empty object.
-    paymentMethod: 'PayPal',
+    paymentMethod: "PayPal",
   },
 };
 {
@@ -56,7 +64,10 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
-  productDelete: productDeleteReducer
+  productDelete: productDeleteReducer,
+  orderList: orderListReducer,
+  orderDelete: orderDeleteReducer,
+  orderDeliver: orderDeliverReducer,
 });
 {
   /* before showing store in Redux Dev tools, need to update compose function */
