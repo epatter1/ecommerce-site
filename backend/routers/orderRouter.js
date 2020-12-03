@@ -35,6 +35,7 @@ orderRouter.get(
   })
 );
 
+/* api request for placing order */
 orderRouter.post(
   "/",
   isAuth, //req.user in utils will be filled with user info
@@ -86,7 +87,7 @@ orderRouter.get(
   })
 );
 
-/* order pay api */
+/* api request to pay for an order */
 orderRouter.put(
   "/:id/pay",
   isAuth,
@@ -109,7 +110,7 @@ orderRouter.put(
   })
 );
 
-/* router for deleting order (see OrderListScreen) */
+/* api request for deleting order (see OrderListScreen) */
 orderRouter.delete(
   "/:id",
   isAuth,
@@ -125,7 +126,7 @@ orderRouter.delete(
   })
 );
 
-/* order delivered api */
+/* api request for delivering an order */
 orderRouter.put(
   "/:id/pay",
   isAuth,

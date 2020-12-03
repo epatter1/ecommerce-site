@@ -18,10 +18,13 @@ import {
   productUpdateReducer,
 } from "./reducers/productReducers";
 import {
+  userDeleteReducer,
   userDetailsReducer,
+  userListReducer,
   userRegisterReducer,
   userSigninReducer,
   userUpdateProfileReducer,
+  userUpdateReducer,
 } from "./reducers/userReducers";
 
 {
@@ -62,12 +65,15 @@ const reducer = combineReducers({
   orderMineList: orderMineListReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
+  userUpdate: userUpdateReducer,
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
   productDelete: productDeleteReducer,
   orderList: orderListReducer,
   orderDelete: orderDeleteReducer,
   orderDeliver: orderDeliverReducer,
+  userList: userListReducer,
+  userDelete: userDeleteReducer
 });
 {
   /* before showing store in Redux Dev tools, need to update compose function */
