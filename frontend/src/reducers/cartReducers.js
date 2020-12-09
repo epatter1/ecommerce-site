@@ -1,5 +1,6 @@
 import {
   CART_ADD_ITEM,
+  CART_ADD_ITEM_FAIL,
   CART_EMPTY,
   CART_REMOVE_ITEM,
   CART_SAVE_PAYMENT_METHOD,
@@ -22,6 +23,7 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
         }
         return {
           ...state,
+          error: '', //means addToCart was successful and error should be gone.
           cartItems: state.cartItems.map((x) =>
             x.product === existItem.product ? item : x
           ),
@@ -30,7 +32,7 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
         {
           /* concatenates cartItems with the new item */
         }
-        return { ...state, cartItems: [...state.cartItems, item] };
+        return { ...state, error: '', cartItems: [...state.cartItems, item] };
       }
       {
         /* Filters out products: 
@@ -39,6 +41,7 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
     case CART_REMOVE_ITEM:
       return {
         ...state,
+        error: '', //setting error to empty string the reset the error in the CartScreen page. This action affects the CartScreen view.
         cartItems: state.cartItems.filter((x) => x.product !== action.payload),
       };
 
@@ -57,10 +60,15 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
       }
     case CART_SAVE_PAYMENT_METHOD:
       return { ...state, paymentMethod: action.payload };
-    
-      /* return previous statu plus empty array */
-    case CART_EMPTY:
-      return { ...state, cartItems: [] };
+      {
+        /* Handle failure to add item to cart */
+      }
+    case CART_ADD_ITEM_FAIL:
+      return { ...state, error: action.payload };
+
+    /* return previous statu plus empty array */
+    case CART_EMPTY: //setting error to empty string the reset the error in the CartScreen page. This action affects the CartScreen view.
+      return { ...state, error: '', cartItems: [] };
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import data from "../data.js";
 import Product from "../models/productModel.js";
-import { isAdmin, isAuth } from "../utils.js";
+import { isAdmin, isAuth, isSellerOrAdmin } from "../utils.js";
 
 const productRouter = express.Router();
 
@@ -13,10 +13,15 @@ const productRouter = express.Router();
 productRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    {
-      /* returns all products */
-    }
-    const products = await Product.find({});
+    /* filter products by seller */
+    const seller = req.query.seller || "";
+    const sellerFilter = seller ? { seller } : {};
+    /* returns all products */
+    //'...' to deconstruct sellerFilter to only put the field of seller, not the object
+    const products = await Product.find({ ...sellerFilter }).populate(
+      "seller",
+      "seller.name seller.logo"
+    ); //populating seller object from user collection
     res.send(products);
   })
 );
@@ -44,7 +49,10 @@ productRouter.get(
 productRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate(
+      "seller",
+      "seller.name seller.logo seller.rating seller.numReviews"
+    ); //populating seller object from user collection;
     if (product) {
       res.send(product);
     } else {
@@ -57,10 +65,11 @@ productRouter.get(
 productRouter.post(
   "/",
   isAuth,
-  isAdmin,
+  isSellerOrAdmin,
   expressAsyncHandler(async (req, res) => {
     const product = new Product({
       name: "sample name " + Date.now(), //Date.now() appends a timestamp which makes the product unique
+      seller: req.user._id, //seller id will be filled by current user
       image: "/images/p1.jpg",
       price: 0,
       category: "sample category",
@@ -79,7 +88,7 @@ productRouter.post(
 productRouter.put(
   "/:id",
   isAuth,
-  isAdmin,
+  isSellerOrAdmin,
   expressAsyncHandler(async (req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);

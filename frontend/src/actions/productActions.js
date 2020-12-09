@@ -17,12 +17,12 @@ import {
   PRODUCT_DELETE_FAIL,
 } from "../constants/productConstants";
 
-export const listProducts = () => async (dispatch) => {
+export const listProducts = ({seller = ''}) => async (dispatch) => {
   dispatch({
     type: PRODUCT_LIST_REQUEST,
   });
   try {
-    const { data } = await Axios.get("/api/products");
+    const { data } = await Axios.get(`/api/products?seller=${seller}`);
     {
       /* -- When action is dispatched, it changes the state of redux
              Based on this, you can update the HomeScreen to show products

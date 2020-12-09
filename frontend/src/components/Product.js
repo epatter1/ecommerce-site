@@ -19,7 +19,16 @@ export default function Product(props) {
           rating={product.rating}
           numReviews={product.numReviews}
         ></Rating>
-        <div className="price">${product.price}</div>
+        <div className="row">
+          <div className="price">${product.price}</div>
+          <div>
+            <Link to={`/seller/${product.seller._id}`}>
+              {product.seller.seller.name}
+              {/* putting 2 'seller' properties because the first points to the productModel and the second to the userModel
+                  Getting name field from second (userModel) seller */}
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

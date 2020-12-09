@@ -124,6 +124,9 @@ a.brand {
 .row.top {
   align-items: flex-start;
 }
+.row.start {
+  justify-content: flex-start;
+}
 .col-1 {
   /* Occupy 1 of 4, make it shrinkable, and set width of column  */
   flex: 1 1 25rem;
@@ -132,10 +135,16 @@ a.brand {
   /* Occupy 2 of 4, make it shrinkable, and set width of column  */
   flex: 2 1 50rem;
 }
+.col-3 {
+  /* Occupy 3 of 4, make it shrinkable, and set width of column  */
+  flex: 32 1 75rem;
+}
 .min-30 {
   min-width: 30rem;
 }
-
+.p-1 {
+  padding: 1rem;
+}
 /* --- Images --- */
 img {
   border-radius: 0.5rem;
@@ -264,11 +273,17 @@ img.large {
 .table tbody tr:nth-of-type(odd) {
   background-color: #f4f4f4;
 }
-.table td, .table th {
+.table td,
+.table th {
   text-align: left;
   border: 0.1rem solid #e4e4e4;
   padding: 0.5rem;
 }
 .table button {
   margin: 0 0.2rem;
+}
+
+/* Carousel */
+.carousel .slide img {
+  max-width: 30rem;
 }

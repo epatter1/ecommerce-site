@@ -7,12 +7,16 @@ import {
 } from "../actions/productActions";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-import { PRODUCT_CREATE_RESET, PRODUCT_DELETE_RESET } from "../constants/productConstants";
+import {
+  PRODUCT_CREATE_RESET,
+  PRODUCT_DELETE_RESET,
+} from "../constants/productConstants";
 
 {
   /* product list screen for Admin users */
 }
 export default function ProductListScreen(props) {
+  const sellerMode = props.match.path.indexOf("/seller") >= 0; //productListScreen should be specified for seller. If index of seller > 0, sellerMode is true
   const productList = useSelector((state) => state.productList);
   const { loading, error, products } = productList;
 
@@ -24,13 +28,14 @@ export default function ProductListScreen(props) {
     product: createdProduct,
   } = productCreate;
   const dispatch = useDispatch();
-  
   const productDelete = useSelector((state) => state.productDelete);
   const {
     loading: loadingDelete,
     error: errorDelete,
     success: successDelete,
   } = productDelete;
+  const userSignIn = useSelector((state) => state.userSignIn);
+  const { userInfo } = userSignIn;
 
   useEffect(() => {
     if (successCreate) {
@@ -41,13 +46,14 @@ export default function ProductListScreen(props) {
     if (successDelete) {
       dispatch({ type: PRODUCT_DELETE_RESET });
     }
-    dispatch(listProducts());
+    dispatch(listProducts({ seller: sellerMode ? userInfo._id : "" })); //if you are in sellerMode in listProducts function, pass seller
   }, [createdProduct, dispatch, props.history, successCreate, successDelete]);
 
   const deleteHandler = (product) => {
     //dispatch delete action
-    if (window.confirm('Are you sure you want to delete?'));
-    dispatch(deleteProduct(product._id));
+    if (window.confirm("Are you sure you want to delete?")) {
+      dispatch(deleteProduct(product._id));
+    }
   };
   const createHandler = () => {
     dispatch(createProduct());

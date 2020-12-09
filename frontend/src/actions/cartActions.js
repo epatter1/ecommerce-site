@@ -7,26 +7,44 @@ import {
   CART_REMOVE_ITEM,
   CART_SAVE_PAYMENT_METHOD,
   CART_SAVE_SHIPPING_ADDRESS,
+  CART_ADD_ITEM_FAIL,
 } from "../constants/cartConstants";
 
 // action dispatched to update the state of the redux store
 export const addToCart = (productId, qty) => async (dispatch, getState) => {
   const { data } = await Axios.get(`/api/products/${productId}`);
-  dispatch({
-    type: CART_ADD_ITEM,
-    payload: {
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      countInStock: data.countInStock,
-      product: data._id,
-      qty,
-    },
-  });
-  {
-    /* value (2nd param) should be a string, not an object */
+  const {
+    cart: { cartItems },
+  } = getState();
+  // console.log(data.seller._id, cartItems[0].seller);
+  // the id of the seller of the 1st product in cartItem is compared with the product id that
+  // you are adding. If they are not equal, then dispatch an error
+  if (cartItems.length > 0 && data.seller._id !== cartItems[0].seller._id) {
+    dispatch({
+      type: CART_ADD_ITEM_FAIL,
+      payload: `Can't Add To Cart. Can only buy from ${cartItems[0].seller.seller.name} in this order`,
+    });
+  } else {
+    dispatch({
+      type: CART_ADD_ITEM,
+      payload: {
+        name: data.name,
+        image: data.image,
+        price: data.price,
+        countInStock: data.countInStock,
+        product: data._id,
+        seller: data.seller, //filling seller field of order from product. NOTE: Currently can ONLY buy from ONE seller at a time
+        qty,
+      },
+    });
+    {
+      /* value (2nd param) should be a string, not an object */
+    }
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(getState().cart.cartItems)
+    );
   }
-  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };
 
 {

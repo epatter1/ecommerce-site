@@ -11,6 +11,16 @@ import { generateToken, isAdmin, isAuth } from "../utils.js";
     -- you can define multiple files to have your routers */
 }
 const userRouter = express.Router();
+/* api to return a list of top sellers */
+userRouter.get(
+  "/top-sellers",
+  expressAsyncHandler(async (req, res) => {
+    const topSellers = await User.find({ isSeller: true }) //filter only users who are sellers
+      .sort({ "seller.rating": -1 }) //sort by seller rating descending
+      .limit(3); // only show top 3 sellers
+    res.send(topSellers); //send back top sellers to frontend
+  })
+);
 
 // hashSync in data.js hashes your passwords
 /* api request for initial seeding of users in DB */
@@ -48,6 +58,7 @@ userRouter.post(
           name: user.name,
           email: user.email,
           isAdmin: user.isAdmin,
+          isSeller: user.isSeller,
           token: generateToken(user),
         });
         return;
@@ -86,6 +97,7 @@ userRouter.post(
       name: createdUser.name,
       email: createdUser.email,
       isAdmin: createdUser.isAdmin,
+      isSeller: user.isSeller,
       token: generateToken(createdUser),
     });
   })
@@ -103,7 +115,7 @@ userRouter.get(
     }
   })
 );
-
+/* api to update user profile */
 userRouter.put(
   "/profile",
   isAuth,
@@ -112,6 +124,12 @@ userRouter.put(
     if (user) {
       user.name = req.body.name || user.name; //if user enters nothing, use the previous name in the DB
       user.email = req.body.email || user.email;
+      if (user.isSeller) {
+        user.seller.name = req.body.sellerName || user.seller.name; //if user is Seller update seller with sellerName value. Oherwise use current name.
+        user.seller.logo = req.body.sellerLogo || user.seller.logo;
+        user.seller.description =
+          req.body.sellerDescription || user.seller.description;
+      }
       if (req.body.password) {
         user.password = bcrypt.hashSync(req.body.password, 8); //encrypt password, using 8 to generate salt
       }
@@ -121,6 +139,7 @@ userRouter.put(
         name: updatedUser.name,
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
+        isSeller: user.isSeller,
         token: generateToken(updatedUser),
       });
     }

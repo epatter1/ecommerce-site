@@ -19,7 +19,7 @@ export default function CartScreen(props) {
     : 1;
   { /* using useSelector to fetch cart data from redux store */ }
   const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
+  const { cartItems, error } = cart;
   /* use addToCart action when there is a product to add to the cart */
   const dispatch = useDispatch();
   useEffect(() => {
@@ -42,6 +42,7 @@ export default function CartScreen(props) {
     <div className="row top">
       <div className="col-2">
         <h1>Shopping Cart</h1>
+        {error && (<MessageBox variant="danger">{error}</MessageBox>) }
         {cartItems.length === 0 ? (
           <MessageBox>
             Cart is empty. <Link to="/">Go Shopping</Link>

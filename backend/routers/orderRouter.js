@@ -1,7 +1,7 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
-import { isAdmin, isAuth } from "../utils.js";
+import { isAdmin, isAuth, isSellerOrAdmin } from "../utils.js";
 
 /* backend api to return orders of current user */
 const orderRouter = express.Router();
@@ -9,12 +9,19 @@ const orderRouter = express.Router();
 orderRouter.get(
   "/",
   isAuth,
-  isAdmin, //get orders from DB and put them in orders
+  isSellerOrAdmin, //get orders from DB and put them in orders
   expressAsyncHandler(async (req, res) => {
+    /* filter products by seller */
+    const seller = req.query.seller || "";
+    const sellerFilter = seller ? { seller } : {};
     //get username from Order object.
-    const orders = await Order.find({}).populate("user", "name"); // From collection 'user', get only the 'name'
+    // From collection 'user', get only the 'name'
     // in order model, the type of user is ObjectId and 'ref' is 'User', it gets id of user and loads user info from user table
     // and only put name of user from that collection. Like a JOIN in SQL.
+    const orders = await Order.find({ ...sellerFilter }).populate(
+      "user",
+      "name"
+    ); //if sellerMode true, only return orders of current seller
     res.send(orders);
   })
 );
@@ -47,6 +54,7 @@ orderRouter.post(
       res.status(400).send({ message: "Cart is empty" });
     } else {
       const order = new Order({
+        seller: req.body.orderItems[0].seller, //seller field in first order item
         orderItems: req.body.orderItems,
         shippingAddress: req.body.shippingAddress,
         paymentMethod: req.body.paymentMethod,
@@ -128,7 +136,7 @@ orderRouter.delete(
 
 /* api request for delivering an order */
 orderRouter.put(
-  "/:id/pay",
+  "/:id/deliver",
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
